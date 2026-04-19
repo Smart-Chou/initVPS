@@ -388,7 +388,6 @@ install_rustdesk_server() {
   url="https://github.com/${RUSTDESK_REPO}/releases/download/${RUSTDESK_VERSION}/${filename}"
 
   tmpdir="$(mktemp -d)"
-  trap 'rm -rf "$tmpdir"' RETURN
 
   log "下载 RustDesk Server: $url"
   curl -fL "$url" -o "${tmpdir}/${filename}"
@@ -396,7 +395,10 @@ install_rustdesk_server() {
   log "解压安装包..."
   unzip -q "${tmpdir}/${filename}" -d "$tmpdir"
 
-  [[ -d "${tmpdir}/${extract_dir}" ]] || die "解压目录不存在: ${extract_dir}"
+  [[ -d "${tmpdir}/${extract_dir}" ]] || {
+    rm -rf "$tmpdir"
+    die "解压目录不存在: ${extract_dir}"
+  }
 
   if [[ -e "${INSTALL_DIR}/hbbs" || -e "${INSTALL_DIR}/hbbr" ]]; then
     if [[ "$FORCE" != "true" ]]; then
@@ -411,6 +413,9 @@ install_rustdesk_server() {
 
   $SUDO chmod +x "${INSTALL_DIR}/hbbs" "${INSTALL_DIR}/hbbr"
   $SUDO chown "$SERVICE_USER:$SERVICE_GROUP" "${INSTALL_DIR}/hbbs" "${INSTALL_DIR}/hbbr"
+
+  rm -rf "$tmpdir"
+
 }
 
 #######################################
