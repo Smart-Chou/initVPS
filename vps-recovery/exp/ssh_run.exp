@@ -1,0 +1,34 @@
+#!/usr/bin/expect -f
+# Generic SSH one-shot command runner. No secrets on disk — read from env.
+#
+# Usage:
+#   export HOST=1.2.3.4 PORT=45356 USER=root PASS='<password>'
+#   expect ssh_run.exp '<remote command>'
+#
+# Optional: export SSH_TIMEOUT=120  (default 30; raise for du/slow commands)
+set timeout [expr {[info exists ::env(SSH_TIMEOUT)] ? $::env(SSH_TIMEOUT) : 30}]
+set host $env(HOST)
+set port $env(PORT)
+set user $env(USER)
+set pass $env(PASS)
+set cmd [lindex $argv 0]
+
+spawn ssh -o NumberOfPasswordPrompts=1 -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -p $port $user@$host $cmd
+expect {
+    -re {[Aa]re you sure} { send "yes\r"; exp_continue }
+    -re {[Pp]assword:} {
+        # Send the password EXACTLY ONCE. Do NOT exp_continue matching
+        # "password" on the stream: remote command output may contain that
+        # word, and re-sending would type the password into the remote shell.
+        send "$pass\r"
+        expect {
+            # 只匹配认证阶段专有句式（命令输出中的普通 "Permission denied" 会误伤——曾因此误报 AUTH_FAILED）
+            -re {[Pp]ermission denied, please try again} { puts "\nAUTH_FAILED"; exit 2 }
+            -re {[Pp]ermission denied \(publickey} { puts "\nAUTH_FAILED"; exit 2 }
+            eof { }
+            timeout { puts "\nTIMEOUT"; exit 1 }
+        }
+    }
+    eof { }
+    timeout { puts "TIMEOUT"; exit 1 }
+}

@@ -1,0 +1,17 @@
+#!/usr/bin/expect -f
+# scp_push.exp <local_file> <remote_path>
+# env: HOST PORT USER PASS
+set timeout 600
+set local [lindex $argv 0]
+set remote [lindex $argv 1]
+log_user 0
+spawn scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o NumberOfPasswordPrompts=1 -P $env(PORT) $local $env(USER)@$env(HOST):$remote
+expect {
+    -re {[Pp]assword:} {
+        send "$env(PASS)\r"
+        expect eof
+    }
+    eof
+}
+log_user 1
+puts "SCP_PUSH_OK"

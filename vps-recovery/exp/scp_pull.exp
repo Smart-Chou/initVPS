@@ -1,0 +1,27 @@
+#!/usr/bin/expect -f
+# scp_pull.exp — pull one file off a remote box
+# env: HOST PORT USER PASS RPATH LPATH
+set timeout 600
+set host $env(HOST)
+set port $env(PORT)
+set user $env(USER)
+set pass $env(PASS)
+set rpath $env(RPATH)
+set lpath $env(LPATH)
+
+spawn scp -P $port -o NumberOfPasswordPrompts=1 -o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 $user@$host:$rpath $lpath
+expect {
+    -re {[Aa]re you sure} { send "yes\r"; exp_continue }
+    -re {[Pp]assword:} {
+        # Send the password EXACTLY ONCE (see ssh_run.exp for rationale).
+        send "$pass\r"
+        expect {
+            -re {[Pp]ermission denied, please try again} { puts "\nAUTH_FAILED"; exit 2 }
+            -re {[Pp]ermission denied \(publickey} { puts "\nAUTH_FAILED"; exit 2 }
+            eof { }
+            timeout { puts "\nTIMEOUT"; exit 1 }
+        }
+    }
+    eof { }
+    timeout { puts "TIMEOUT"; exit 1 }
+}
