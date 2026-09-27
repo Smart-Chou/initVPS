@@ -2,7 +2,7 @@
 # Generic SSH one-shot command runner. No secrets on disk — read from env.
 #
 # Usage:
-#   export HOST=1.2.3.4 PORT=45356 USER=root PASS='<password>'
+#   export HOST=1.2.3.4 PORT=2222 USER=root PASS='<password>'
 #   expect ssh_run.exp '<remote command>'
 #
 # Optional: export SSH_TIMEOUT=120  (default 30; raise for du/slow commands)

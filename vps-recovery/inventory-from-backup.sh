@@ -3,7 +3,7 @@
 #
 # 跑在【跳板机】上、备份目录下执行。
 #
-# Usage: BACKUP_DIR=/root/vps-backup-20260927 ./inventory-from-backup.sh
+# Usage: BACKUP_DIR=/root/vps-backup-YYYYMMDD ./inventory-from-backup.sh
 # 注: LIST_CACHE 缓存一份 tar 列表，避免反复遍历大 tarball。
 set -u
 BACKUP_DIR="${BACKUP_DIR:-/root/vps-backup}"

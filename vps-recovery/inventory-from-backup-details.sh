@@ -4,7 +4,7 @@
 #
 # 跑在【跳板机】上、备份目录下执行。先跑一次 inventory-from-backup.sh 生成 LIST_CACHE。
 #
-# Usage: BACKUP_DIR=/root/vps-backup-20260927 ./inventory-from-backup-details.sh
+# Usage: BACKUP_DIR=/root/vps-backup-YYYYMMDD ./inventory-from-backup-details.sh
 set -u
 BACKUP_DIR="${BACKUP_DIR:-/root/vps-backup}"
 LIST_CACHE="${LIST_CACHE:-/tmp/vps-backup-list.txt}"

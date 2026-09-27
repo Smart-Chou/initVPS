@@ -8,7 +8,7 @@
 # Usage:
 #   TARGET_IP=x.x.x.x ./probe-reachability.sh
 #   TARGET_IP=x.x.x.x SSH_PORT=22 PORTS="22 80 443" ./probe-reachability.sh
-#   TARGET_IP=x.x.x.x HTTP_PORT=36038 HTTP_PATH=/login ./probe-reachability.sh
+#   TARGET_IP=x.x.x.x HTTP_PORT=8080 HTTP_PATH=/login ./probe-reachability.sh
 # 可选:
 #   TARGET_IP6=...   # 顺便探测 IPv6
 set -u

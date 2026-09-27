@@ -53,8 +53,8 @@ TARGET_IP=x.x.x.x ./probe-reachability.sh
 TARGET_HOST=x.x.x.x TARGET_PORT=22 TARGET_PASS='***' ./backup-vps.sh
 
 # 从备份 tarball 里盘点"原来装过什么"（只读，不改备份）
-BACKUP_DIR=/root/vps-backup-20260927 ./inventory-from-backup.sh
-BACKUP_DIR=/root/vps-backup-20260927 ./inventory-from-backup-details.sh
+BACKUP_DIR=/root/vps-backup-YYYYMMDD ./inventory-from-backup.sh
+BACKUP_DIR=/root/vps-backup-YYYYMMDD ./inventory-from-backup-details.sh
 ```
 
 ### 2. 重装完成后：先看状态
@@ -71,7 +71,7 @@ TARGET_HOST=x.x.x.x TARGET_PORT=22 TARGET_PASS='***' ./status-check.sh
 
 ```bash
 # 跳板机：从大备份里抽出服务子集，做成一个小恢复包
-BACKUP_DIR=/root/vps-backup-20260927 ./stage-from-backup.sh
+BACKUP_DIR=/root/vps-backup-YYYYMMDD ./stage-from-backup.sh
 
 # 推给目标机并执行恢复任务
 ./relay-push.sh /root/vps-restore-bundle.tgz /tmp/vps-restore-bundle.tgz

@@ -3,7 +3,7 @@
 #
 # 跑在【跳板机】上。目录结构在打包前就摆平（避免目标机解包多一层——真踩过这个坑）。
 #
-# Usage:  BACKUP_DIR=/root/vps-backup-20260927 ./stage-from-backup.sh
+# Usage:  BACKUP_DIR=/root/vps-backup-YYYYMMDD ./stage-from-backup.sh
 # 输出:   $BUNDLE（默认 /root/vps-restore-bundle.tgz）→ 用 relay-push.sh 推给目标机
 #         /root/sberestore/  —— sing-box 备份的解包镜像（给端到端测试用）
 set -e
